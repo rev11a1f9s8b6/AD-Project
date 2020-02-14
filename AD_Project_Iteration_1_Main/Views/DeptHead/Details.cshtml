@@ -1,0 +1,62 @@
+﻿@using AD_Project_Iteration_1_Main.Models_DB;
+@model IEnumerable<AD_Project_Iteration_1_Main.Models_DB.Emp_Request_Details>
+
+@{
+    /**/
+
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var User = (Employee)ViewData["USER"];    // mandatory Filds
+    var sessionId = (string)ViewData["SessionId"];  //mandatory fields
+    var FormUser = (Employee)ViewData["FormSubmittedUser"];
+    var Emp_Req_Id = (int)ViewData["Emp_Req_Id"];
+}
+<h2>Details</h2>
+<h3>
+    Requested Employee : @FormUser.Full_Name
+</h3>
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Product.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Product.UOM)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.UOM)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+        </tr>
+    }
+    <tr></tr>
+</table>
+@using (Html.BeginForm("ManageRequest", "DeptHead", FormMethod.Post))
+{
+    <div class="form-group">
+        <label for="comment">Comment:</label>
+        <textarea class="form-control" rows="5" id="comment" name="comments"></textarea>
+    </div>
+    <div>
+        <input type="hidden" name="sessionId" value="@sessionId" />
+        <input type="hidden" name="id" value="@Emp_Req_Id" />
+        <button type="submit" class="btn btn-danger" name="type" value="REJECT">Reject</button>
+        <button type="submit" class="btn btn-success" name="type" value="ACCEPT">Accept</button>
+    </div>
+    
+}

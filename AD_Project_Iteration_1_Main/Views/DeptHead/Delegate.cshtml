@@ -1,0 +1,96 @@
+﻿@using AD_Project_Iteration_1_Main.Models_DB;
+@using AD_Project_Iteration_1_Main.Models;
+@model IEnumerable<SelectListItem>
+
+@{
+    /**/
+
+    ViewBag.Title = "Delegate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var User = (Employee)ViewData["USER"];//manadatory portion
+    var sessionId = (string)ViewData["SessionId"];  //manadatory portion
+
+
+    var Dept_Employees = (List<Employee>)ViewData["Dept_Employees"];
+    bool isDelegated = (bool)ViewData["IsDelegated"];
+    var Curr_Delegate = (Employee)ViewData["Current_Delegate"];
+    var Past_Delegates = (List<Emp_Delegation>)ViewData["Past_Delegates"];
+
+}
+<script>
+    function onChange_Emp_Id() {
+        var e = document.getElementById("Item_Emp_Id");
+        console.log(e.options[e.selectedIndex].value);
+        var tochange = document.getElementById("Emp_Id");
+        tochange.value = e.options[e.selectedIndex].value;
+    };
+</script>
+<h2>Delegate</h2>
+<h3>Current Delegate for this Period : @if (Curr_Delegate != null) { @Curr_Delegate.Full_Name}else{ <span>No Delegates For Today</span>  }</h3>
+
+@if (isDelegated)
+{
+    <div class="alert alert-success">
+        <strong>Success!</strong>Your Delegation Successfull Without any Fails
+    </div>
+
+}
+else
+{
+    <div class="alert alert-danger">
+        <strong>Warning!</strong>Your Current Selection Dosen't match the Delegation Criteria
+    </div>
+}
+@using (Html.BeginForm("AddDelegation", "DeptHead", FormMethod.Post))
+{
+    <div class="container">
+
+        @if (Dept_Employees.Count != 0)
+        {
+            <label>Select an Employee For Delegation</label>
+            @Html.DropDownList("Select Representative", Dept_Employees.Select(item => new SelectListItem { Text = item.Full_Name, Value = item.Emp_Id, Selected = (item.Emp_Id == User.Emp_Id) ? true : false }), new { id = "Item_Emp_Id", onChange = "onChange_Emp_Id()" })
+            <input type="hidden" name="Emp_Id" id="Emp_Id" />
+            <input type="hidden" name="sessionId" value="@sessionId" />
+            <input type="date" name="start" required />
+            <input type="date" name="end" required />
+            <input type="submit" value="Apply Delegate" />
+        }
+    </div>
+
+
+}
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <th scope="col">Employee</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Past_Delegates != null)
+        {
+
+            foreach (Emp_Delegation item in Past_Delegates)
+            {
+
+                <tr>
+                    <th scope="row">@item.Employee.Full_Name</th>
+                    <td>@item.Start_Date</td>
+                    <td>@item.End_Date</td>
+                    <td>@item.Status</td>
+                    @if (@item.Status == "ACTIVE")
+                    {
+                        <td>  @Html.ActionLink("Inactivate", "InActivateDelegate", new { sessionId = sessionId, Del_Id = @item.Delegate_Id }) |</td>
+                    }
+                </tr>
+
+
+            }
+        }
+
+    </tbody>
+
+</table>
+

@@ -1,0 +1,55 @@
+﻿@using AD_Project_Iteration_1_Main.Models_DB;
+@model IEnumerable<AD_Project_Iteration_1_Main.Models_DB.Emp_Request_Details>
+
+@{
+    ViewBag.Title = "CheckOut";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string sessionId = (string)ViewData["SessionId"];
+    Emp_Request_Details temp = Model.FirstOrDefault();
+}
+
+<h2>CheckOut</h2>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.3.1/jquery.quicksearch.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Product.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Description)
+            </td>
+            <td>
+                <input type="number" value="@item.Quantity" min="0" name="@item.Quantity"  readonly/>
+            </td>
+            <td>
+                @Html.ActionLink("+", "Update", new { sessionId = sessionId, id = @item.Emp_Req_Details_Id, Quantity = item.Quantity + 1 }) |
+                @Html.ActionLink("-", "Update", new { sessionId = sessionId, id = @item.Emp_Req_Details_Id, Quantity = item.Quantity - 1 }) |
+                @Html.ActionLink("Delete", "Update", new { sessionId = sessionId, id = @item.Emp_Req_Details_Id, Quantity = 0 })
+            </td>
+        </tr>
+    }
+    <tr>
+        @if (temp != null && temp.Emp_Req_Id > 0)
+        {
+            <td></td>
+            <td>@Html.ActionLink("SubmitForm", "SubmitReqForm", "Employee", new { sessionId, id = temp.Emp_Req_Id }, null)</td>
+        }
+
+    </tr>
+</table>
+

@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+      
+        <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.3.1/jquery.quicksearch.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  
+    <meta charset="UTF-8">
+    <title>Logic University</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/PageDesign/css/styleLayout.css")
+    @using AD_Project_Iteration_1_Main.Services;
+    @using AD_Project_Iteration_1_Main.Models_DB;
+    @{
+        var User = (Employee)ViewData["USER"];
+        var sessionId = (string)ViewData["SessionId"];
+    }
+
+
+</head>
+<body>
+  
+    <div class="wrapper">
+        <div class="sidebar">
+            <h2>Logic</h2>
+            <h2>University</h2>
+
+
+            @if (User.Role == "DEPT_EMPLOYEE"){
+                <ul>
+                      <li><a href="#"><i class="fas fa-home"></i>@Html.ActionLink("Home", "index", "Employee", new { sessionId }, null)</a></li>
+                      <li><a href="#"><i class="fas fa-user"></i>@Html.ActionLink("Request Stationary", "MakeRequest", "Employee", new { sessionId }, null)</a></li>
+                      <li><a href="#"><i class="fas fa-address-card"></i>@Html.ActionLink("View Past Requests", "ViewRequests", "Employee", new { sessionId }, null)</a></li>
+                  
+                    @if (User.Emp_Id == User.Department.Dept_Rep_Id)
+                    {
+                     <li><a href="#"><i class="fas fa-address-card"></i>@Html.ActionLink("View Disbursements", "ViewDisbursements", "DeptRep", new { sessionId }, null)</a></li>
+                     }
+                  @if (DelegationServices.GetCurrentDelegate(sessionId)!=null && User.Emp_Id == DelegationServices.GetCurrentDelegate(sessionId).Emp_Id)
+                    {
+                     <li><a href="#"><i class="fas fa-user"></i>@Html.ActionLink("View Pending Requests", "ViewRequest", "DeptHead", new { sessionId }, null)</a></li>
+                     <li><a href="#"><i class="fas fa-address-card"></i>@Html.ActionLink("Update Department List", "UpdateDeptList", "DeptHead", new { sessionId }, null) </a></li>
+                   }
+                </ul>
+            }
+            @if (User.Role == "DEPT_HEAD")
+            {
+                <ul>
+                    <li><a href="#"><i class="fas fa-home"></i>@Html.ActionLink("Home", "index", "DeptHead", new { sessionId }, null)</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i>@Html.ActionLink("View Pending Requests", "ViewRequest", "DeptHead", new { sessionId }, null)</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>@Html.ActionLink("Delegate Authority", "Delegate", "DeptHead", new { sessionId }, null)</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>@Html.ActionLink("Update Department List", "UpdateDeptList", "DeptHead", new { sessionId }, null) </a></li>
+                </ul>
+            }
+
+            @if (User.Role == "STORE_CLERK")
+            {
+                <ul>
+                    <li><a href="#"><i class="fas fa-home"></i>@Html.ActionLink("Home", "index", "StoreClerk", new { sessionId }, null)</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i>View Stationary Retrival List </a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>Create Disbursment List</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>View Disbursement List</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i>Generate ReOrder Report</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>View Stock Card</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>Create Adjustment Voucher</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>View Past Adjustment Vouchers</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>Create Purchase Order</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>View Purchase Order History</a></li>
+                </ul>
+            }
+            @if (User.Role == "STORE_SUPERVISOR")
+            {
+                <ul>
+                    <li><a href="#"><i class="fas fa-home"></i>@Html.ActionLink("Home", "index", "StoreSupervisor", new { sessionId }, null)</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i>View Stationary Retrival List </a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>Create Disbursment List</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>View Disbursement List</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i>Generate ReOrder Report</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>View Stock Card</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>Create Adjustment Voucher</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>View Past Adjustment Vouchers</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>Create Purchase Order</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>View Purchase Order History</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>Manage Adjustment Voucher</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>Generate Requistition Trend</a></li>
+                </ul>
+            }
+            @if (User.Role == "STORE_MANAGER")
+            {
+                <ul>
+                    <li><a href="#"><i class="fas fa-home"></i>@Html.ActionLink("Home", "index", "StoreManager", new { sessionId }, null)</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i>View Stationary Retrival List </a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>Create Disbursment List</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>View Disbursement List</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i>Generate ReOrder Report</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>View Stock Card</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>Create Adjustment Voucher</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>View Past Adjustment Vouchers</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>Create Purchase Order</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>View Purchase Order History</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>Manage Adjustment Voucher</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>Generate Requistition Trend</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>Generate Requistition Trend</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>Manage Supplier List</a></li>
+                    <li><a href="#"><i class="fas fa-address-card"></i>Manage Catalogue List</a></li>
+
+                </ul>
+            }
+        </div>
+        <div class="main_content">
+            <div class="header">
+                <span style="float: left"><i class="fas fa-user-alt"></i></span>
+                <span style="float: left" id="showDate"> @DateTime.Now</span>
+
+
+                <span style="float:right">@Html.ActionLink("Logout", "Logout", "Login",new { sessionId },null)</span>
+                <span style="float:right"><i class="fas fa-bell"></i></span>
+
+            </div>
+            <div class="info">
+                <h3>Hi @User.Full_Name You are @User.Role  of @User.Department.Dep_Name </h3>
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

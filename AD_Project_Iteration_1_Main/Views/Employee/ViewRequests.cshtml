@@ -1,0 +1,83 @@
+﻿@using AD_Project_Iteration_1_Main.Models_DB;
+
+@model IEnumerable<AD_Project_Iteration_1_Main.Models_DB.Emp_Request>
+
+@{
+    ViewBag.Title = "ViewRequests";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var User = (Employee)ViewData["USER"];    // mandatory Filds
+    var sessionId = (string)ViewData["SessionId"];  //mandatory fields
+}
+
+<h2>ViewRequests</h2>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quicksearch + Bootstrap</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.3.1/jquery.quicksearch.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Emp_Req_Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Approved_By)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date_Approved)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Recieved_By)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date_Recieved)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Comment)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+           REQ# @Html.DisplayFor(modelItem => item.Emp_Req_Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Approved_By)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date_Approved)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Recieved_By)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date_Recieved)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comment)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Details", new { id = item.Emp_Req_Id, sessionId }, null) |
+
+            @if (item.Status=="PENDING")
+            {
+                @Html.ActionLink("Delete", "Delete", new { id = item.Emp_Req_Id, sessionId }, null)
+            }
+
+        </td>
+    </tr>
+    }
+
+</table>

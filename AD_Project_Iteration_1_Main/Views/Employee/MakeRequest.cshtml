@@ -1,0 +1,71 @@
+﻿@using AD_Project_Iteration_1_Main.Models_DB;
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Catalogue> Products = (List<Catalogue>)ViewData["Products"];
+    var User = (Employee)ViewData["USER"];    // mandatory Filds
+    var sessionId = (string)ViewData["SessionId"];  //mandatory fields
+    bool submitted = (bool)ViewData["isSubmitted"];
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+    <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.3.1/jquery.quicksearch.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+    <button type="button" class="btn btn-primary">@Html.ActionLink("CheckOut", "CheckOut", "Employee", new { sessionId }, null)</button>
+
+    @if (submitted)
+    {
+        <div class="alert alert-success">
+            <strong>Success!</strong>Your Request Submitted
+        </div>
+
+    }
+    <div class="form-group input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+        <input name="query" id="txt_query" placeholder="Search" type="text" class="form-control">
+    </div>
+    <table id="table" class="table table-hover">
+        <thead>
+            <tr>
+                <th>Item Description</th>
+                <th>Quantity Needed</th>
+                <th>Action</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var Product in Products)
+            {
+                using (Html.BeginForm("AddToForm", "Employee", FormMethod.Post))
+                {
+                    <tr>
+                        <th>@Product.Description <input type="hidden" name="Item_Num" value="@Product.Item_Num" /></th>
+                        <td><input type="number" min="0" value="0" max="@Product.Available_Quantity/2" name="Quantity_Needed" /></td>
+
+
+                        <td>
+                            <input type="hidden" value="@sessionId" name="sessionId" />
+                            <input type="submit" value="Add To Request" />
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <script>
+        $('input#txt_query').quicksearch('table#table tbody tr');
+    </script>
+
+
+
+
+</body>
+</html>
+
